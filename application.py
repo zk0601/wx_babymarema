@@ -15,7 +15,7 @@ from utils.helper import logger, request_log
 
 class Application(tornado.web.Application):
     def __init__(self):
-        self.baseDir = os.path.dirname(__file__)
+        self.baseDir = os.path.dirname(os.path.realpath(__file__))
 
         database_url = 'mysql+mysqldb://{}:{}@{}/{}?charset=utf8'.format(options.mysql_user, options.mysql_password,
                                                                          options.mysql_host, options.mysql_database)
