@@ -12,10 +12,10 @@ class MakeWatermarkHandler(BaseHandler):
     def post(self):
         try:
             photo = self.get_argument('photo', None)
-            if not photo:
-                return self.response(code=10002, msg="缺失照片地址")
-
             birthday = self.get_argument("birthday", None)
+            if not photo or not birthday:
+                return self.response(code=10002, msg="参数错误")
+
             weight = self.get_argument('weight', None)
             height = self.get_argument('height', None)
 

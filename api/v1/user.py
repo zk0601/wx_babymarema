@@ -12,6 +12,9 @@ class LoginHandler(BaseHandler):
             code = self.get_argument('code', None)
             nick_name = self.get_argument('nick_name', None)
             image = self.get_argument('image', None)
+            gender = self.get_argument('gender', '')
+            province = self.get_argument('province', '')
+            city = self.get_argument('city', '')
 
             if not code:
                 return self.response(code=10002, msg="缺失Code")
@@ -19,7 +22,6 @@ class LoginHandler(BaseHandler):
                 return self.response(code=10002, msg='参数错误')
 
             json_data = wx_api.wx_get_session(code)
-            print(json_data)
             errcode = json_data['errcode']
 
             if not errcode == 0:
@@ -29,7 +31,8 @@ class LoginHandler(BaseHandler):
                 openid = json_data['openid']
                 session_key = json_data['session_key']
                 unionid = json_data['unionid']
-                user = User(openid=openid, nick_name=nick_name, image_url=image, create_time=datetime.datetime.now())
+                user = User(openid=openid, nick_name=nick_name, image_url=image, gender=gender,
+                            province=province, city=city, create_time=datetime.datetime.now())
                 self.session.add(user)
                 self.session.flush()
                 userid = user.user_id
@@ -45,3 +48,8 @@ class LoginHandler(BaseHandler):
             self.session.rollback()
             return self.response(code=10000, msg='服务端异常')
 
+
+class UserAuthHandler(BaseHandler):
+    @run_on_executor
+    def get(self):
+        return self.response(code=10010, msg='非登录用户无权限')
