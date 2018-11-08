@@ -118,8 +118,8 @@ class BaseHandler(tornado.web.RequestHandler):
         token_openid = json_data["openid"]
 
         arguments = self.request.arguments
-        value = arguments['openid']
-        if int(value) == token_openid:
+        value = arguments['openid'][0].decode()
+        if value == token_openid:
             return True
         else:
             return False

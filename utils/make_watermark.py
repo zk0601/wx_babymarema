@@ -3,7 +3,7 @@ import os
 import datetime
 import shutil
 
-Current_Path = os.path.dirname(__file__)
+Current_Path = os.path.dirname(os.path.realpath(__file__))
 
 
 class MakeWatermark(object):
@@ -13,7 +13,7 @@ class MakeWatermark(object):
         self.height = height
         self.color_font = color_font
         self.transparency = transparency
-        self.ttf_font = os.path.join(Current_Path, ttf)
+        self.ttf_font = os.path.join(Current_Path, "ttf_dir", ttf)
 
     def total_days(self):
         date_fromat = "%Y-%m-%d"
@@ -43,10 +43,11 @@ class MakeWatermark(object):
                 count += 3
         return count / 3
 
-    def make(self, input, output):
+    def make(self, input, output, id_str):
         Month = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'June', 'July', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
         img = Image.open(input)
-        temp_file = os.path.join(Current_Path, "temp.jpg")
+        temp_file_name = "%s.jpg" % id_str
+        temp_file = os.path.join(Current_Path, temp_file_name)
         img_width = img.size[0]
         img_height = img.size[1]
         size = int(img_width / 20)

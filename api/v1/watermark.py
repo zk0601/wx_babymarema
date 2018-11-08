@@ -32,15 +32,16 @@ class MakeWatermarkHandler(BaseHandler):
             tmp_dir = os.path.join(self.basedir, 'temp_photos')
             tmp_photo = os.path.join(tmp_dir, "%s.jpg" % openid)
             with open(tmp_photo, 'wb') as infile:
-                infile.write(photo)
-            watermark.make(tmp_photo, tmp_photo)
+                infile.write(base64.b64decode(photo.encode()))
+            watermark.make(tmp_photo, tmp_photo, str(openid))
             with open(tmp_photo, 'rb') as outfile:
                 output_photo = base64.b64encode(outfile.read())
+            os.remove(tmp_photo)
             baby = Baby(birthday=birthday, weight=weight, height=height, create_time=datetime.datetime.now())
             self.session.add(baby)
             self.session.commit()
 
-            return self.response(data={'photo': output_photo}, code=10001, msg='success')
+            return self.response(data={'photo': output_photo.decode()}, code=10001, msg='success')
 
         except Exception as e:
             self.logger.error(str(e))
