@@ -37,6 +37,11 @@ class MakeWatermarkHandler(BaseHandler):
             with open(outphoto, 'wb') as infile:
                 infile.write(base64.b64decode(photo.encode()))
             watermark.make(outphoto, outphoto, str(openid))
+            if not weight:
+                weight = float(0)
+            if not height:
+                height = float(0)
+
             baby = Baby(birthday=birthday, weight=weight, height=height, create_time=datetime.datetime.now())
             self.session.add(baby)
             self.session.commit()
