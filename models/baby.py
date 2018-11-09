@@ -9,8 +9,8 @@ class Baby(Base):
     __tablename__ = 'baby'
     baby_id = Column(INTEGER, primary_key=True, autoincrement=True)
     birthday = Column(VARCHAR(255))
-    weight = Column(FLOAT(4, 1))
-    height = Column(FLOAT(4, 1))
+    weight = Column(FLOAT(5, 2))
+    height = Column(FLOAT(5, 2))
     create_time = Column(DATETIME, default=datetime.datetime.now())
 
     def keys(self):
