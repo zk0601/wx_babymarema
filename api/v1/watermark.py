@@ -32,6 +32,8 @@ class MakeWatermarkHandler(BaseHandler):
             openid = json_data["openid"]
             outphoto_filename = "%s.jpg" % openid
             outphoto = os.path.join(photo_dir, outphoto_filename)
+            if os.path.exists(outphoto):
+                os.remove(outphoto)
             with open(outphoto, 'wb') as infile:
                 infile.write(base64.b64decode(photo.encode()))
             watermark.make(outphoto, outphoto, str(openid))
