@@ -82,7 +82,8 @@ class BaseHandler(tornado.web.RequestHandler):
         urlobj = urlparse(self.request.uri)
         request_path = urlobj.path
 
-        token = self.request.headers.get("Authentication")
+        # token = self.request.headers.get("Authentication")
+        token = self.get_argument("token", None)
         # 登录权限
         if request_path in self.application.Need_Token_URLs and not self.userAuthCheck(token):
             return self.redirect("/v1/user/auth")

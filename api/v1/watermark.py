@@ -25,23 +25,21 @@ class MakeWatermarkHandler(BaseHandler):
             # if not ttf_font or not color_font or not transparency:
             #     return self.response(code=10002, msg='参数错误')
 
+            photo_dir = os.path.join(self.basedir, "photo_directory")
             watermark = MakeWatermark(birthday, weight, height)
-            token = self.request.headers.get("Authentication", None)
+            token = self.get_argument("token", None)
             json_data = self.decode(token)
             openid = json_data["openid"]
-            tmp_dir = os.path.join(self.basedir, 'temp_photos')
-            tmp_photo = os.path.join(tmp_dir, "%s.jpg" % openid)
-            with open(tmp_photo, 'wb') as infile:
+            outphoto_filename = "%s.jpg" % openid
+            outphoto = os.path.join(photo_dir, outphoto_filename)
+            with open(outphoto, 'wb') as infile:
                 infile.write(base64.b64decode(photo.encode()))
-            watermark.make(tmp_photo, tmp_photo, str(openid))
-            with open(tmp_photo, 'rb') as outfile:
-                output_photo = base64.b64encode(outfile.read())
-            os.remove(tmp_photo)
+            watermark.make(outphoto, outphoto, str(openid))
             baby = Baby(birthday=birthday, weight=weight, height=height, create_time=datetime.datetime.now())
             self.session.add(baby)
             self.session.commit()
 
-            return self.response(data={'photo': output_photo.decode()}, code=10001, msg='success')
+            return self.response(data={'photo': outphoto_filename}, code=10001, msg='success')
 
         except Exception as e:
             self.logger.error(str(e))
