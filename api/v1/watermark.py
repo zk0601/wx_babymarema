@@ -25,6 +25,10 @@ class MakeWatermarkHandler(BaseHandler):
             # if not ttf_font or not color_font or not transparency:
             #     return self.response(code=10002, msg='参数错误')
 
+            if weight:
+                weight = float(weight)
+            if height:
+                height = float(height)
             photo_dir = os.path.join(self.basedir, "photo_directory")
             watermark = MakeWatermark(birthday, weight, height)
             token = self.get_argument("token", None)
