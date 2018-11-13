@@ -19,6 +19,6 @@ define("max_workers", default=25, type=int, help="max threads")
 define("secret", default='Camera~348#fgEHz24$9deHPfL', help="token secret")
 
 #wechat config
-define("AppID", default='wxecd4405453198abb', help='wechat mini program id')
-define('APPSecret', default='66fa8490754d313b29cb9d1b72fbbd57', help='wechat secret')
+define("AppID", default='wx2c9019cf1490a026', help='wechat mini program id')
+define('APPSecret', default='05cdec8c75b831e96d66a02a93fe8dca', help='wechat secret')
 

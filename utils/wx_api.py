@@ -6,7 +6,7 @@ def wx_get_session(code):
     req_params = {
         "appid": options.AppID,
         "secret": options.APPSecret,
-        "js_code": code,
+        "js_code": str(code),
         "grant_type": 'authorization_code'
     }
     req_result = requests.get('https://api.weixin.qq.com/sns/jscode2session',
