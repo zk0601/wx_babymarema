@@ -33,8 +33,8 @@ class LoginHandler(BaseHandler):
             else:
                 openid = json_data['openid']
                 session_key = json_data['session_key']
-                unionid = json_data['unionid']
-                user = User(openid=openid, nick_name=nick_name, image_url=image, gender=gender,
+                # unionid = json_data['unionid']
+                user = User(openid=openid, nick_name=nick_name, image_url=image, gender=str(gender),
                             province=province, city=city, create_time=datetime.datetime.now())
                 self.session.add(user)
                 self.session.flush()
