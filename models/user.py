@@ -9,7 +9,7 @@ class User(Base):
     __tablename__ = 'user'
     user_id = Column(INTEGER, primary_key=True, autoincrement=True)
     openid = Column(VARCHAR(255), unique=True)
-    nick_name = Column(VARCHAR(255))
+    nickname = Column(VARCHAR(255))
     image_url = Column(VARCHAR(255))
     gender = Column(VARCHAR(12))
     province = Column(VARCHAR(255))
