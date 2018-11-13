@@ -20,7 +20,7 @@ class Application(tornado.web.Application):
         database_url = 'mysql+mysqldb://{}:{}@{}/{}?charset=utf8'.format(options.mysql_user, options.mysql_password,
                                                                          options.mysql_host, options.mysql_database)
         engine = create_engine(database_url, encoding='utf8', pool_size=options.pool_size,
-                               pool_recycle=options.pool_recycle, echo=True, echo_pool=False)
+                               pool_recycle=options.pool_recycle, echo=False, echo_pool=False)
         self.session = scoped_session(sessionmaker(bind=engine, autocommit=False))
 
         settings = {

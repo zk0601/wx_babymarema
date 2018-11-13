@@ -34,15 +34,19 @@ class LoginHandler(BaseHandler):
                 openid = json_data['openid']
                 session_key = json_data['session_key']
                 # unionid = json_data['unionid']
-                user = User(openid=openid, nickname=nick_name, image_url=image, gender=str(gender),
-                            province=province, city=city, create_time=datetime.datetime.now())
-                self.session.add(user)
-                self.session.flush()
-                userid = user.user_id
+                user = self.session.query(User).filter(User.openid == openid).first()
+                if not user:
+                    user = User(openid=openid, nickname=nick_name, session_key=session_key, image_url=image, gender=str(gender),
+                                province=province, city=city, create_time=datetime.datetime.now())
+                    self.session.add(user)
+                    self.session.flush()
+                else:
+                    user.session_key = session_key
                 self.session.commit()
+                userid = user.id
 
-                token = self.encode(userid, openid)
-                data = {'openid': openid, 'session_key': session_key, 'token':token}
+                token = self.encode(userid, openid, session_key)
+                data = {'openid': openid, 'token': token}
 
                 return self.response(data=data, code=10001, msg='success')
 

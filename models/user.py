@@ -7,8 +7,9 @@ Base = declarative_base()
 #user_model
 class User(Base):
     __tablename__ = 'user'
-    user_id = Column(INTEGER, primary_key=True, autoincrement=True)
+    id = Column(INTEGER, primary_key=True, autoincrement=True)
     openid = Column(VARCHAR(255), unique=True)
+    session_key = Column(VARCHAR(255))
     nickname = Column(VARCHAR(255))
     image_url = Column(VARCHAR(255))
     gender = Column(VARCHAR(12))

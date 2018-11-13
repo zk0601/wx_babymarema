@@ -7,7 +7,7 @@ Base = declarative_base()
 #baby_model
 class Baby(Base):
     __tablename__ = 'baby'
-    baby_id = Column(INTEGER, primary_key=True, autoincrement=True)
+    id = Column(INTEGER, primary_key=True, autoincrement=True)
     birthday = Column(VARCHAR(255))
     weight = Column(FLOAT(5, 2))
     height = Column(FLOAT(5, 2))

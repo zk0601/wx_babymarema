@@ -31,9 +31,7 @@ class MakeWatermarkHandler(BaseHandler):
                 height = float(height)
             photo_dir = os.path.join(self.basedir, "photo_directory")
             watermark = MakeWatermark(birthday, weight, height)
-            token = self.get_argument("token", None)
-            json_data = self.decode(token)
-            openid = json_data["openid"]
+            openid = self.get_argument("openid", None)
             outphoto_filename = "%s.jpg" % openid
             outphoto = os.path.join(photo_dir, outphoto_filename)
             if os.path.exists(outphoto):

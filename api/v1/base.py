@@ -10,6 +10,8 @@ from tornado.escape import json_encode
 from tornado.concurrent import run_on_executor
 from concurrent.futures import ThreadPoolExecutor
 
+from models.user import User
+
 
 class BaseHandler(tornado.web.RequestHandler):
     executor = ThreadPoolExecutor(options.max_workers)
@@ -42,21 +44,21 @@ class BaseHandler(tornado.web.RequestHandler):
         if self.get_status() >= 500:
             self.session.remove()
 
-    def encode(self, userId, openid):
+    def encode(self, userId, openid, session_key):
         """
         根据id 生成token
         :param userId: 用户id
         """
         data = {"user_id": userId, "openid": openid,  "loginTime": str(datetime.datetime.now())}
-        return jwt.encode(data, options.secret, algorithm='HS256').decode()
+        return jwt.encode(data, session_key, algorithm='HS256').decode()
 
-    def decode(self, token):
+    def decode(self, token, session_key):
         """
         解锁token内信息
         :param token:
         """
         try:
-            return jwt.decode(token, options.secret)
+            return jwt.decode(token, session_key)
         except:
             raise tornado.web.HTTPError(401)
 
@@ -115,11 +117,18 @@ class BaseHandler(tornado.web.RequestHandler):
         if not token:
             return False
 
-        json_data = self.decode(token)
-        token_openid = json_data["openid"]
-
         arguments = self.request.arguments
         value = arguments['openid'][0].decode()
+        user = self.session.query(User).filter(User.openid == value).first()
+        if not user:
+            return False
+        session_key = user.session_key
+
+        json_data = self.decode(token, session_key)
+        if "openid" not in json_data:
+            return False
+        token_openid = json_data["openid"]
+
         if value == token_openid:
             return True
         else:
