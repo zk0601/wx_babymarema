@@ -22,11 +22,14 @@ class LoginHandler(BaseHandler):
                 return self.response(code=10002, msg='参数错误')
 
             json_data = wx_api.wx_get_session(code)
-            errcode = json_data['errcode']
+            if not 'errcode' in json_data:
+                errcode = 0
+            else:
+                errcode = json_data['errcode']
 
             if not errcode == 0:
                 errMsg = json_data['errmsg']
-                return self.response(code=10002, msg=errMsg)
+                return self.response(code=10002, msg="errcode:%s, errmsg: %s" % (errcode, errMsg))
             else:
                 openid = json_data['openid']
                 session_key = json_data['session_key']
